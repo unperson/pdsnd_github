@@ -3,13 +3,15 @@ import math
 import pandas as pd
 import numpy as np
 
-CITY_DATA = { 'chicago': 'chicago.csv',
-              'new york city': 'new_york_city.csv',
-              'washington': 'washington.csv' }
+CITY_DATA = {'chicago': 'chicago.csv',
+             'new york city': 'new_york_city.csv',
+             'washington': 'washington.csv'}
 
 CITIES = ['chicago', 'new york city', 'washington']
 MONTHS = ['all', 'january', 'february', 'march', 'april', 'may', 'june']
-DAYS_OF_WEEK = ['all', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday']
+DAYS_OF_WEEK = ['all', 'monday', 'tuesday', 'wednesday',
+                'thursday', 'friday', 'saturday', 'sunday']
+
 
 def get_filters():
     """
@@ -24,21 +26,25 @@ def get_filters():
     # TO DO: get user input for city (chicago, new york city, washington). HINT: Use a while loop to handle invalid inputs
     city = ''
     while city not in CITIES:
-        city = input('Please enter one of the following cities to analyze: Chicago, New York City, Washington: ').strip().lower()
+        city = input(
+            'Please enter one of the following cities to analyze: Chicago, New York City, Washington: ').strip().lower()
 
     # TO DO: get user input for month (all, january, february, ... , june)
     month = ''
     while month not in MONTHS:
-        month = input('Please enter one of the following months to analyze: all, January, February, March, April, May, June: ').strip().lower()
+        month = input(
+            'Please enter one of the following months to analyze: all, January, February, March, April, May, June: ').strip().lower()
 
     # TO DO: get user input for day of week (all, monday, tuesday, ... sunday)
     day = ''
     while day not in DAYS_OF_WEEK:
-        day = input('Please enter the day of week to analyze, e.g. all, Monday, Tuesday, Wednesday, ...: ').strip().lower()
+        day = input(
+            'Please enter the day of week to analyze, e.g. all, Monday, Tuesday, Wednesday, ...: ').strip().lower()
 
     print('-'*40)
 
     return city, month, day
+
 
 def load_data(city, month, day):
     """
@@ -63,7 +69,7 @@ def load_data(city, month, day):
         # use the index of the months list to get the corresponding int
         months = ['january', 'february', 'march', 'april', 'may', 'june']
         month = months.index(month) + 1
-        
+
         # filter by month to create the new dataframe
         df = df[df['month'] == month]
     # filter by day of week if applicable
@@ -73,6 +79,7 @@ def load_data(city, month, day):
 
     return df
 
+
 def time_stats(df):
     """Displays statistics on the most frequent times of travel."""
 
@@ -80,19 +87,22 @@ def time_stats(df):
     start_time = time.time()
 
     # TO DO: display the most common month
-    print('The most common month of travel: ' + MONTHS[df['month'].mode()[0]].title())
+    print('The most common month of travel: ' +
+          MONTHS[df['month'].mode()[0]].title())
     print('-'*20)
-    
+
     # TO DO: display the most common day of week
     print('The most common day of travel: ' + df['day_of_week'].mode()[0])
     print('-'*20)
 
-    # TO DO: display the most common start hour    
-    print('The most common start hour of travel: ' + str(df['Start Time'].dt.hour.mode()[0]))
+    # TO DO: display the most common start hour
+    print('The most common start hour of travel: ' +
+          str(df['Start Time'].dt.hour.mode()[0]))
     print('-'*20)
-    
+
     print("\nThis took %s seconds." % (time.time() - start_time))
     print('-'*40)
+
 
 def station_stats(df):
     """Displays statistics on the most popular stations and trip."""
@@ -101,7 +111,8 @@ def station_stats(df):
     start_time = time.time()
 
     # TO DO: display most commonly used start station
-    print('The most commonly used start station was: ' + df['Start Station'].mode()[0])
+    print('The most commonly used start station was: ' +
+          df['Start Station'].mode()[0])
     print('-'*20)
 
     # TO DO: display most commonly used end station
@@ -133,7 +144,8 @@ def trip_duration_stats(df):
     minutes = total_trip_time_in_seconds // 60
     total_trip_time_in_seconds = total_trip_time_in_seconds % 60
     seconds = total_trip_time_in_seconds
-    print(f"The total travel time in days, hours, minutes, seconds: {int(days)} days, {int(hours)} hours, {int(minutes)} minutes, {int(math.floor(seconds))} seconds")
+    print(
+        f"The total travel time in days, hours, minutes, seconds: {int(days)} days, {int(hours)} hours, {int(minutes)} minutes, {int(math.floor(seconds))} seconds")
     print('-'*20)
 
     # TO DO: display mean travel time
@@ -146,11 +158,13 @@ def trip_duration_stats(df):
     minutes = mean_travel_time // 60
     mean_travel_time = mean_travel_time % 60
     seconds = mean_travel_time
-    print(f"The mean travel time in days, hours, minutes, seconds: {int(days)} days, {int(hours)} hours, {int(minutes)} minutes, {int(math.floor(seconds))} seconds")
+    print(
+        f"The mean travel time in days, hours, minutes, seconds: {int(days)} days, {int(hours)} hours, {int(minutes)} minutes, {int(math.floor(seconds))} seconds")
     print('-'*20)
-    
+
     print("\nThis took %s seconds." % (time.time() - start_time))
     print('-'*40)
+
 
 def user_stats(df):
     """Displays statistics on bikeshare users."""
@@ -161,32 +175,35 @@ def user_stats(df):
     # TO DO: Display counts of user types
     print('User Type Counts:')
     print(df['User Type'].value_counts())
-    print('-'*20)    
+    print('-'*20)
 
     # TO DO: Display counts of gender
     if 'Gender' in df.columns:
         print('Gender Counts:')
         print(df['Gender'].value_counts())
         print('-'*20)
-    
+
     # TO DO: Display earliest, most recent, and most common year of birth
     if 'Birth Year' in df.columns:
         print(f"Earliest year of birth: {int(df['Birth Year'].min())}")
         print(f"Most recent year of birth: {int(df['Birth Year'].max())}")
         print(f"Most common year of birth: {int(df['Birth Year'].mode()[0])}")
-          
+
     print("\nThis took %s seconds." % (time.time() - start_time))
     print('-'*40)
-    
+
+
 def display_raw_data(df):
     index = 0
-    response = input('Do you want to see 5 lines of raw data (yes/no)? ').strip().lower()
+    response = input(
+        'Do you want to see 5 lines of raw data (yes/no)? ').strip().lower()
     while response == 'yes' and index < df.shape[0]:
         print(df.iloc[index:index + 5])
         index += 5
-        response = input('Do you want to see 5 more lines of raw data (yes/no)? ').lower()
-        
-        
+        response = input(
+            'Do you want to see 5 more lines of raw data (yes/no)? ').lower()
+
+
 def main():
     while True:
         city, month, day = get_filters()
@@ -202,5 +219,6 @@ def main():
         if restart.lower() != 'yes':
             break
 
+
 if __name__ == "__main__":
-	main()
+    main()
